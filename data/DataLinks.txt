@@ -1,0 +1,8 @@
+NYPL-menus.zip - Raw Data Files
+https://www.dropbox.com/scl/fi/hccwohcgkoe646ggac1br/NYPL-menus.zip?rlkey=bduc1g3zv6ppwgnrh3zdfp5ly&dl=0
+
+OpenRefine-CleansedOutput.zip - Intermediate clean files (cleaned by OpenRefine only)
+https://www.dropbox.com/scl/fi/igokpkz9uzu1jcsbzg8q8/OpenRefine-CleansedOutput.zip?rlkey=c3wbibxcj0hvouv8djt5ptz1b&dl=0
+
+SQLite-CleansedOutput.zip
+https://www.dropbox.com/scl/fi/7n48gw91pqebi04bsd5rb/SQLite-CleansedOutput.zip?rlkey=n03zo3lf8ontcnk8q7ws3xx7j&dl=0

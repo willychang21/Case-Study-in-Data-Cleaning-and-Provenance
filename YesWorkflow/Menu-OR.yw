@@ -1,0 +1,105 @@
+#@begin Menu-OpenRefine-Workflow #@desc Linear OpenRefine Workflow
+#@param removeOriginalColumn:True
+#@param expression:grel:value.replace(/([0-9\\.]+)\\s*x\\s*([0-9\\.]+)/,_"$1X$2")
+#@param col-name:physical_description_additional
+#@param col-name:physical_description_type
+#@param col-name:physical_description_7
+#@param expression:grel:if(value.match(/^([0-9\\.]+)x([0-9\\.]+)$/),_"",_value)
+#@param expression:grel:if(value.match(/\\d/),_"",_value)
+#@param separator:";"
+#@param col-name:physical_description_5
+#@param col-name:physical_description_4
+#@param oldColumnName:physical_description_copy
+#@param expression:grel:if(value.match(/\\d/),_null,_value)
+#@param col-name:physical_description
+#@param col-name:physical_description_6
+#@param newColumnName:physical_description
+#@param col-name:physical_description_3
+#@param expression:grel:value.replace(/([0-9\\.]+)x([0-9\\.]+)/,_"$1X$2")
+#@param col-name:physical_description_2
+#@in table0
+#@out table15
+#@begin core/column-removal0#@desc Remove column physical_description_additional
+#@param col-name:physical_description_additional
+#@in table0
+#@out table1
+#@end core/column-removal0
+#@begin core/column-removal1#@desc Remove column physical_description 5
+#@param col-name:physical_description_5
+#@in table1
+#@out table2
+#@end core/column-removal1
+#@begin core/column-removal2#@desc Remove column physical_description 6
+#@param col-name:physical_description_6
+#@in table2
+#@out table3
+#@end core/column-removal2
+#@begin core/column-removal3#@desc Remove column physical_description_type
+#@param col-name:physical_description_type
+#@in table3
+#@out table4
+#@end core/column-removal3
+#@begin core/column-removal4#@desc Remove column physical_description 2
+#@param col-name:physical_description_2
+#@in table4
+#@out table5
+#@end core/column-removal4
+#@begin core/column-removal5#@desc Remove column physical_description 3
+#@param col-name:physical_description_3
+#@in table5
+#@out table6
+#@end core/column-removal5
+#@begin core/column-removal6#@desc Remove column physical_description 4
+#@param col-name:physical_description_4
+#@in table6
+#@out table7
+#@end core/column-removal6
+#@begin core/column-removal7#@desc Remove column physical_description 7
+#@param col-name:physical_description_7
+#@in table7
+#@out table8
+#@end core/column-removal7
+#@begin core/column-rename0#@desc Rename column physical_description_copy to physical_description
+#@param oldColumnName:physical_description_copy
+#@param newColumnName:physical_description
+#@in table8
+#@out table9
+#@end core/column-rename0
+#@begin core/column-split0#@desc Split column physical_description by separator
+#@param col-name:physical_description
+#@param separator:";"
+#@param removeOriginalColumn:True
+#@in table9
+#@out table10
+#@end core/column-split0
+#@begin core/text-transform0#@desc Text transform on cells in column physical_description 2 using expression grel:if(value.match(/\\d/), null, value)
+#@param col-name:physical_description_2
+#@param expression:grel:if(value.match(/\\d/),_null,_value)
+#@in table10
+#@out table11
+#@end core/text-transform0
+#@begin core/text-transform1#@desc Text transform on cells in column physical_description 2 using expression grel:if(value.match(/\\d/), \"\", value)
+#@param col-name:physical_description_2
+#@param expression:grel:if(value.match(/\\d/),_"",_value)
+#@in table11
+#@out table12
+#@end core/text-transform1
+#@begin core/text-transform2#@desc Text transform on cells in column physical_description 4 using expression grel:value.replace(/([0-9\\.]+)x([0-9\\.]+)/, \"$1X$2\")
+#@param col-name:physical_description_4
+#@param expression:grel:value.replace(/([0-9\\.]+)x([0-9\\.]+)/,_"$1X$2")
+#@in table12
+#@out table13
+#@end core/text-transform2
+#@begin core/text-transform3#@desc Text transform on cells in column physical_description 4 using expression grel:if(value.match(/^([0-9\\.]+)x([0-9\\.]+)$/), \"\", value)
+#@param col-name:physical_description_4
+#@param expression:grel:if(value.match(/^([0-9\\.]+)x([0-9\\.]+)$/),_"",_value)
+#@in table13
+#@out table14
+#@end core/text-transform3
+#@begin core/text-transform4#@desc Text transform on cells in column physical_description 4 using expression grel:value.replace(/([0-9\\.]+)\\s*x\\s*([0-9\\.]+)/, \"$1X$2\")
+#@param col-name:physical_description_4
+#@param expression:grel:value.replace(/([0-9\\.]+)\\s*x\\s*([0-9\\.]+)/,_"$1X$2")
+#@in table14
+#@out table15
+#@end core/text-transform4
+#@end Menu-OpenRefine-Workflow

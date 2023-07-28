@@ -1,0 +1,155 @@
+'''
+@begin TEAM-169-Data-Cleanup-Workflow @desc Team 169 - New York Public Library Menu Dataset Cleanup Workflow
+@in Menu.csv @uri file://01-RawDataSet/Menu.csv
+@in Dish.csv @uri file://01-RawDataSet/Dish.csv
+@in MenuItem.csv @uri file://01-RawDataSet/MenuItem.csv
+@in MenuPage.csv @uri file://01-RawDataSet/MenuPage.csv
+@param ModelCreation.original.sql
+@param ModelCreation.sql
+	
+	@begin BaselineAnalytics @desc Load Raw Data Files into SQLite tables for Baseline IC Violation Analytics
+	@in Menu.csv @uri file://01-RawDataSet/Menu.csv
+    @in Dish.csv @uri file://01-RawDataSet/Dish.csv
+    @in MenuItem.csv @uri file://01-RawDataSet/MenuItem.csv
+    @in MenuPage.csv @uri file://01-RawDataSet/MenuPage.csv
+    @param ModelCreation.original.sql
+    @out SQLMenuRaw @uri sqlite://ProjectPhaseII-NoConstraints.db/Menu
+    @out SQLDishRaw @uri sqlite://ProjectPhaseII-NoConstraints.db/Dish
+    @out SQLMenuPageRaw @uri sqlite://ProjectPhaseII-NoConstraints.db/MenuPage
+    @out SQLMenuItemRaw @uri sqlite://ProjectPhaseII-NoConstraints.db/MenuItem
+    @out ICViolationsForMenuRaw @uri ICViolationsForMenuRaw
+    @out ICViolationsForDishRaw @uri ICViolationsForDishRaw
+    @out ICViolationsForMenuPageRaw @uri ICViolationsForMenuPageRaw
+    @out ICViolationsForMenuItemRaw @uri ICViolationsForMenuItemRaw
+    
+    
+        @begin BaselineICChecksOnMenu @desc USE SQLLite to load 
+        @in Menu.csv @uri file://01-RawDataSet/Menu.csv
+        @param ModelCreation.original.sql
+        @out SQLMenuRaw @uri sqlite://ProjectPhaseII-NoConstraints.db/Menu
+        @out ICViolationsForMenu @uri ICViolationsForMenu
+        @end BaselineICChecksOnMenu
+        
+        @begin BaselineICChecksOnDish @desc Use SQLLite to load CleanDish.csv into table Dish
+        @in Dish.csv @uri file://01-RawDataSet/Dish.csv
+        @param ModelCreation.original.sql
+        @out SQLDishRaw @uri sqlite://ProjectPhaseII-NoConstraints.db/Dish
+        @out ICViolationsForDish @uri ICViolationsForDish
+        @end BaselineICChecksOnDish
+        
+    	@begin BaselineICChecksOnMenuPage @desc Use SQLLite to load CleanMenuPage.csv into table MENU_PAGE
+        @in MenuPage.csv @uri file://01-RawDataSet/MenuPage.csv
+        @param ModelCreation.original.sql
+        @out SQLMenuPageRaw @uri sqlite://ProjectPhaseII-NoConstraints.db/MenuPage
+        @out ICViolationsForMenuPage @uri ICViolationsForMenuPage
+        @end BaselineICChecksOnMenuPage
+    	
+        @begin BaselineICChecksOnMenuItem @desc Use SQLLite to load CleanMenuItem.csv into table MENU_ITEM
+        @in MenuItem.csv @uri file://01-RawDataSet/MenuItem.csv
+        @param ModelCreation.original.sql
+        @out SQLMenuItemRaw @uri sqlite://ProjectPhaseII-NoConstraints.db/MenuItem
+        @out ICViolationsForMenuItem @uri ICViolationsForMenuItem
+        @end BaselineICChecksOnMenuItem
+
+	@end BaselineAnalytics
+	
+	@begin OpenRefineCleanup @desc Load Raw Data Files into OpenRefine to produce cleansed files
+	@in Menu.csv @uri file://01-RawDataSet/Menu.csv
+    @in Dish.csv @uri file://01-RawDataSet/Dish.csv
+    @in MenuItem.csv @uri file://01-RawDataSet/MenuItem.csv
+    @in MenuPage.csv @uri file://01-RawDataSet/MenuPage.csv
+    @out ORMenu.csv @uri file://02-CleanDataSet/Menu.csv
+    @out ORDish.csv @uri file://02-CleanDataSet/Dish.csv
+    @out ORMenuPage.csv @uri file://02-CleanDataSet/MenuPage.csv
+    @out ORMenuItem.csv @uri file://02-CleanDataSet/MenuItem.csv
+    
+
+    	@begin MenuCleanupUsingOpenRefine @desc Perform cleanup operations for Menu.csv using OpenRefine
+    	@in Menu.csv @uri file://01-RawDataSet/Menu.csv
+    	@out ORMenu.csv @uri file://02-CleanDataSet/Menu.csv
+    	@end MenuCleanupUsingOpenRefine
+    		
+    		
+    	@begin DishCleanupUsingOpenRefine @desc Perform cleanup operations for Dish.csv using OpenRefine
+    	@in Dish.csv @uri file://01-RawDataSet/Dish.cv
+    	@out ORDish.csv @uri file://02-CleanDataSet/Dish.csv
+    	@end DishCleanupUsingOpenRefine
+    		
+    		
+    	@begin MenuPageCleanupUsingOpenRefine @desc Perform cleanup operations for MenuPage.csv using OpenRefine
+    	@in MenuPage.csv @uri file://01-RawDataSet/MenuPage.cv
+    	@out ORMenuPage.csv @uri file://02-CleanDataSet/MenuPage.csv
+    	@end MenuPageCleanupUsingOpenRefine
+    
+    	@begin MenuItemCleanupUsingOpenRefine @desc Perform cleanup operations for MenuItem.csv using OpenRefine
+    	@in MenuItem.csv @uri file://01-RawDataSet/MenuItem.cv
+    	@out ORMenuItem.csv @uri file://02-CleanDataSet/MenuItem.csv
+    	@end MenuItemCleanupUsingOpenRefine
+    
+    @end OpenRefineCleanup
+    
+    
+    @begin SQLiteCleanup @desc Load Raw Data Files into OpenRefine to produce cleansed files
+	@in ORMenu.csv @uri file://02-CleanDataSet/Menu.csv
+    @in ORDish.csv @uri file://02-CleanDataSet/Dish.csv
+    @in ORMenuPage.csv @uri file://02-CleanDataSet/MenuPage.csv
+    @in ORMenuItem.csv @uri file://02-CleanDataSet/MenuItem.csv
+    @param ModelCreation.sql
+	@out SQLMenuClean @uri sqlite://ProjectPhaseII-NoConstraints-Clean.db/Menu
+	@out SQLDishClean @uri sqlite://ProjectPhaseII-NoConstraints-Clean.db/Dish
+	@out SQLMenuItemClean @uri sqlite://ProjectPhaseII-NoConstraints-Clean.db/MenuItem
+	@out SQLMenuPageClean @uri sqlite://ProjectPhaseII-NoConstraints-Clean.db/MenuPage
+    
+        @begin SQLOperationsOnMenu @desc USE SQLLite to load 
+        @in ORMenu.csv @uri file://02-CleanDataSet/Menu.csv
+        @param menuLoadingSQLScript
+        @param ModelCreation.sql
+        @out SQLMenuClean @uri sqlite://ProjectPhaseII-NoConstraints-Clean.db/Menu
+        @end SQLOperationsOnMenu
+        
+        @begin SQLOperationsOnDish @desc Use SQLLite to load CleanDish.csv into table DISH
+        @in ORDish.csv @uri file://02-CleanDataSet/Dish.csv
+        @param dishLoadingSQLScript
+        @param ModelCreation.sql
+        @out SQLDishClean @uri sqlite://ProjectPhaseII-NoConstraints-Clean.db/Dish
+        @end SQLOperationsOnDish
+        
+        @begin SQLOperationsOnMenuItem @desc Use SQLLite to load CleanMenuItem.csv into table MENU_ITEM
+        @in ORMenuItem.csv @uri file://02-CleanDataSet/MenuItem.csv
+        @param menuItemLoadingSQLScript
+        @param ModelCreation.sql
+        @out SQLMenuItemClean @uri sqlite://ProjectPhaseII-NoConstraints-Clean.db/MenuItem
+        @end SQLOperationsOnMenuItem
+        
+        @begin SQLOperationsOnMenuPage @desc Use SQLLite to load CleanMenuPage.csv into table MENU_PAGE
+        @in ORMenuPage.csv @uri file://02-CleanDataSet/MenuPage.csv
+        @param menuPageLoadingSQLScript
+        @param ModelCreation.sql
+        @out SQLMenuPageClean @uri sqlite://ProjectPhaseII-NoConstraints-Clean.db/MenuPage
+        @end SQLOperationsOnMenuPage
+    @end SQLiteCleanup
+    
+
+    @begin SQLiteICFinalStateAnalytics @desc Use SQLite to profile the IC violation counts in the resulting cleansed data set
+    @in SQLMenuClean @uri sqlite://ProjectPhaseII-NoConstraints-Clean.db/Menu
+	@in SQLDishClean @uri sqlite://ProjectPhaseII-NoConstraints-Clean.db/Dish
+	@in SQLMenuItemClean @uri sqlite://ProjectPhaseII-NoConstraints-Clean.db/MenuItem
+	@in SQLMenuPageClean @uri sqlite://ProjectPhaseII-NoConstraints-Clean.db/MenuPage
+    @param IntegrityConstraintsANDFunctionalDependenciesScript
+    @out ICViolationsForMenuCleansed @uri ICViolationsForMenuCleansed
+    @out ICViolationsForDishCleansed @uri ICViolationsForDishCleansed
+    @out ICViolationsForMenuPageCleansed @uri ICViolationsForMenuPageCleansed
+    @out ICViolationsForMenuItemCleansed @uri ICViolationsForMenuItemCleansed
+    @end SQLConstraintsCheck
+    
+@out SQLMenuClean @uri sqlite://ProjectPhaseII-NoConstraints-Clean.db/Menu
+@out SQLDishClean @uri sqlite://ProjectPhaseII-NoConstraints-Clean.db/Dish
+@out SQLMenuItemClean @uri sqlite://ProjectPhaseII-NoConstraints-Clean.db/MenuItem
+@out SQLMenuPageClean @uri sqlite://ProjectPhaseII-NoConstraints-Clean.db/MenuPage
+@out ICViolationsForMenuCleansed @uri ICViolationsForMenuCleansed
+@out ICViolationsForDishCleansed @uri ICViolationsForDishCleansed
+@out ICViolationsForMenuPageCleansed @uri ICViolationsForMenuPageCleansed
+@out ICViolationsForMenuItemCleansed @uri ICViolationsForMenuItemCleansed
+@end DataCleanup
+
+'''

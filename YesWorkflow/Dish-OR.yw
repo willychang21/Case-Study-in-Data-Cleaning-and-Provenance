@@ -1,0 +1,154 @@
+#@begin Dish-OpenRefine-Workflow #@desc Linear OpenRefine Workflow
+#@param col-name:last_appeared
+#@param col-name:name
+#@param expression:value.replace(/\\s+/,'_')
+#@param expression:value.toDate()
+#@param newColumnName:name_clean
+#@param expression:value.toTitlecase()
+#@param expression:value.replace("2928","0")
+#@param expression:grel:value.datePart("year")
+#@param expression:grel:value.replace(/[`~!@#$%^&*()_|+\\-=?;:'",.<>\\{\\}\\[\\]\\\\\\/]/,'_')
+#@param col-name:name_clean
+#@param col-name:first_appeared
+#@param expression:grel:value.replace(/\\d/,'')
+#@param expression:value.trim()
+#@param expression:value.toLowercase()
+#@in table0
+#@out table24
+#@begin core/text-transform0#@desc Text transform on cells in column name using expression value.trim()
+#@param col-name:name
+#@param expression:value.trim()
+#@in table0
+#@out table1
+#@end core/text-transform0
+#@begin core/text-transform1#@desc Text transform on cells in column name using expression value.replace(/\\s+/,' ')
+#@param col-name:name
+#@param expression:value.replace(/\\s+/,'_')
+#@in table1
+#@out table2
+#@end core/text-transform1
+#@begin core/text-transform2#@desc Text transform on cells in column name using expression grel:value.replace(/\\d/,'')
+#@param col-name:name
+#@param expression:grel:value.replace(/\\d/,'')
+#@in table2
+#@out table3
+#@end core/text-transform2
+#@begin core/text-transform3#@desc Text transform on cells in column name using expression grel:value.replace(/[`~!@#$%^&*()_|+\\-=?;:'\",.<>\\{\\}\\[\\]\\\\\\/]/,' ')
+#@param col-name:name
+#@param expression:grel:value.replace(/[`~!@#$%^&*()_|+\\-=?;:'",.<>\\{\\}\\[\\]\\\\\\/]/,'_')
+#@in table3
+#@out table4
+#@end core/text-transform3
+#@begin core/text-transform4#@desc Text transform on cells in column name using expression value.trim()
+#@param col-name:name
+#@param expression:value.trim()
+#@in table4
+#@out table5
+#@end core/text-transform4
+#@begin core/text-transform5#@desc Text transform on cells in column name using expression value.replace(/\\s+/,' ')
+#@param col-name:name
+#@param expression:value.replace(/\\s+/,'_')
+#@in table5
+#@out table6
+#@end core/text-transform5
+#@begin core/text-transform6#@desc Text transform on cells in column name using expression value.toLowercase()
+#@param col-name:name
+#@param expression:value.toLowercase()
+#@in table6
+#@out table7
+#@end core/text-transform6
+#@begin core/mass-edit0#@desc Mass edit cells in column name
+#@param col-name:name
+#@in table7
+#@out table8
+#@end core/mass-edit0
+#@begin core/mass-edit1#@desc Mass edit cells in column name
+#@param col-name:name
+#@in table8
+#@out table9
+#@end core/mass-edit1
+#@begin core/mass-edit2#@desc Mass edit cells in column name
+#@param col-name:name
+#@in table9
+#@out table10
+#@end core/mass-edit2
+#@begin core/text-transform7#@desc Text transform on cells in column name using expression value.trim()
+#@param col-name:name
+#@param expression:value.trim()
+#@in table10
+#@out table11
+#@end core/text-transform7
+#@begin core/text-transform8#@desc Text transform on cells in column name using expression value.replace(/\\s+/,' ')
+#@param col-name:name
+#@param expression:value.replace(/\\s+/,'_')
+#@in table11
+#@out table12
+#@end core/text-transform8
+#@begin core/mass-edit3#@desc Mass edit cells in column name
+#@param col-name:name
+#@in table12
+#@out table13
+#@end core/mass-edit3
+#@begin core/text-transform9#@desc Text transform on cells in column name using expression value.toTitlecase()
+#@param col-name:name
+#@param expression:value.toTitlecase()
+#@in table13
+#@out table14
+#@end core/text-transform9
+#@begin core/text-transform10#@desc Text transform on cells in column first_appeared using expression value.toDate()
+#@param col-name:first_appeared
+#@param expression:value.toDate()
+#@in table14
+#@out table15
+#@end core/text-transform10
+#@begin core/text-transform11#@desc Text transform on cells in column first_appeared using expression grel:value.datePart(\"year\")
+#@param col-name:first_appeared
+#@param expression:grel:value.datePart("year")
+#@in table15
+#@out table16
+#@end core/text-transform11
+#@begin core/text-transform12#@desc Text transform on cells in column last_appeared using expression value.toDate()
+#@param col-name:last_appeared
+#@param expression:value.toDate()
+#@in table16
+#@out table17
+#@end core/text-transform12
+#@begin core/text-transform13#@desc Text transform on cells in column last_appeared using expression grel:value.datePart(\"year\")
+#@param col-name:last_appeared
+#@param expression:grel:value.datePart("year")
+#@in table17
+#@out table18
+#@end core/text-transform13
+#@begin core/text-transform14#@desc Text transform on cells in column first_appeared using expression value.replace(\"2928\",\"0\")
+#@param col-name:first_appeared
+#@param expression:value.replace("2928","0")
+#@in table18
+#@out table19
+#@end core/text-transform14
+#@begin core/mass-edit4#@desc Mass edit cells in column first_appeared
+#@param col-name:first_appeared
+#@in table19
+#@out table20
+#@end core/mass-edit4
+#@begin core/mass-edit5#@desc Mass edit cells in column first_appeared
+#@param col-name:first_appeared
+#@in table20
+#@out table21
+#@end core/mass-edit5
+#@begin core/column-addition0#@desc Create column name clean at index 2 based on column name using expression grel:value
+#@param col-name:name
+#@param newColumnName:"name_clean"
+#@in table21
+#@out table22
+#@end core/column-addition0
+#@begin core/mass-edit6#@desc Mass edit cells in column name clean
+#@param col-name:name_clean
+#@in table22
+#@out table23
+#@end core/mass-edit6
+#@begin core/mass-edit7#@desc Mass edit cells in column name clean
+#@param col-name:name_clean
+#@in table23
+#@out table24
+#@end core/mass-edit7
+#@end Dish-OpenRefine-Workflow

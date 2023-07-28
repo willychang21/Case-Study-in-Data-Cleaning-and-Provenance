@@ -1,0 +1,97 @@
+'''
+@begin TEAM-169-Data-Cleanup-Workflow @desc Team 169 - New York Public Library Menu Dataset Inner SQLite Workflow
+@in ORMenu.csv @uri file://02-CleanDataSet/Menu.csv
+@in ORDish.csv @uri file://02-CleanDataSet/Dish.csv
+@in ORMenuPage.csv @uri file://02-CleanDataSet/MenuPage.csv
+@in ORMenuItem.csv @uri file://02-CleanDataSet/MenuItem.csv
+@param ModelCreation.sql
+
+
+	@begin LoadMenu @desc Load Menu dataset from OpenRefine into SQLite table
+	@in ORMenu.csv @uri file://02-CleanDataSet/Menu.csv
+	@out SQLMenuClean @uri sqlite://ProjectPhaseII-NoConstraints-Clean.db/Menu
+	@end LoadMenu
+
+	@begin LoadDish @desc Load Dish dataset from OpenRefine into SQLite table
+	@in ORDish.csv @uri file://02-CleanDataSet/Dish.csv
+	@out SQLDishClean @uri sqlite://ProjectPhaseII-NoConstraints-Clean.db/Dish
+	@end LoadDish
+	
+	@begin LoadMenuPage @desc Load Menu Page dataset from OpenRefine into SQLite table
+	@in ORMenuPage.csv @uri file://02-CleanDataSet/MenuPage.csv
+	@out SQLMenuPageClean @uri sqlite://ProjectPhaseII-NoConstraints-Clean.db/MenuPage
+	@end LoadMenuPage
+
+	@begin LoadMenuItem @desc Load Menu Item dataset from OpenRefine into SQLite table
+	@in ORMenuItem.csv @uri file://02-CleanDataSet/MenuItem.csv
+	@out SQLMenuItemClean @uri sqlite://ProjectPhaseII-NoConstraints-Clean.db/MenuItem
+	@end LoadMenuItem
+
+	@begin ResolveDishCluster @desc Use name_clean to reduce the total # of rows in Dish to represent a single row per cluster from OpenRefine
+	@in SQLDishClean @uri sqlite://ProjectPhaseII-NoConstraints-Clean.db/Dish
+	@out SQLDishClean @uri sqlite://ProjectPhaseII-NoConstraints-Clean.db/Dish
+	@end ResolveDishCluster
+
+	@begin PropagateDishClusterMenuItem @desc Propagate changes from Dish clustering to MenuItem to retain relationships via dish_id
+	@in SQLDishClean @uri sqlite://ProjectPhaseII-NoConstraints-Clean.db/Dish
+	@out SQLMenuItemClean @uri sqlite://ProjectPhaseII-NoConstraints-Clean.db/MenuItem
+	@end PropagateDishClusterMenuItem
+
+	@begin RecalculateDishStatistics @desc Use clustered data to recalc aggregate properties on Dish (counts, price ranges, date ranges)
+	@in SQLMenuClean @uri sqlite://ProjectPhaseII-NoConstraints-Clean.db/Menu
+	@in SQLDishClean @uri sqlite://ProjectPhaseII-NoConstraints-Clean.db/Dish
+	@in SQLMenuItemClean @uri sqlite://ProjectPhaseII-NoConstraints-Clean.db/MenuItem
+	@in SQLMenuPageClean @uri sqlite://ProjectPhaseII-NoConstraints-Clean.db/MenuPage
+	@out SQLDishClean @uri sqlite://ProjectPhaseII-NoConstraints-Clean.db/Dish
+	@end RecalculateDishStatistics
+
+	@begin RecalculateMenuStatistics @desc Recalculate dish counts for Menus
+	@in SQLMenuClean @uri sqlite://ProjectPhaseII-NoConstraints-Clean.db/Menu
+	@in SQLDishClean @uri sqlite://ProjectPhaseII-NoConstraints-Clean.db/Dish
+	@in SQLMenuItemClean @uri sqlite://ProjectPhaseII-NoConstraints-Clean.db/MenuItem
+	@in SQLMenuPageClean @uri sqlite://ProjectPhaseII-NoConstraints-Clean.db/MenuPage
+	@out SQLMenuClean @uri sqlite://ProjectPhaseII-NoConstraints-Clean.db/Menu
+	@end RecalculateMenuStatistics
+
+	@begin PruneMenuPage @desc Remove menu pages referencing non-existent Menu IDs
+	@in SQLMenuClean @uri sqlite://ProjectPhaseII-NoConstraints-Clean.db/Menu
+	@in SQLMenuPageClean @uri sqlite://ProjectPhaseII-NoConstraints-Clean.db/MenuPage
+	@out SQLMenuPageClean @uri sqlite://ProjectPhaseII-NoConstraints-Clean.db/MenuPage
+	@end PruneMenuPage
+
+	@begin PruneMenuItem @desc Remove menu items referencing non-existent Menu Page IDs and non-existent Dish IDs
+	@in SQLMenuPageClean @uri sqlite://ProjectPhaseII-NoConstraints-Clean.db/MenuPage
+	@in SQLDishClean @uri sqlite://ProjectPhaseII-NoConstraints-Clean.db/Dish
+	@in SQLMenuItemClean @uri sqlite://ProjectPhaseII-NoConstraints-Clean.db/MenuItem
+	@out SQLMenuItemClean @uri sqlite://ProjectPhaseII-NoConstraints-Clean.db/MenuItem
+	@end PruneMenuItem
+	
+	@begin PruneDish @desc Remove unreferenced Dish records
+	@in SQLDishClean @uri sqlite://ProjectPhaseII-NoConstraints-Clean.db/Dish
+	@in SQLMenuItemClean @uri sqlite://ProjectPhaseII-NoConstraints-Clean.db/MenuItem
+	@out SQLDishClean @uri sqlite://ProjectPhaseII-NoConstraints-Clean.db/Dish
+	@end PruneDish
+
+	@begin PopulateMenuCategoriesFromPhysicalDescription @desc Populate new menu attributes (dimensions, damage, format, misc) from phsyical_description 
+	@in SQLMenuClean @uri sqlite://ProjectPhaseII-NoConstraints-Clean.db/Menu
+	@out SQLMenuClean @uri sqlite://ProjectPhaseII-NoConstraints-Clean.db/Menu
+	@end PopulateMenuCategoriesFromPhysicalDescription
+
+	@begin DropUnwantedColumns @desc Remove unwanted columns from Menu and Dish tables
+	@in SQLMenuClean @uri sqlite://ProjectPhaseII-NoConstraints-Clean.db/Menu
+	@in SQLDishClean @uri sqlite://ProjectPhaseII-NoConstraints-Clean.db/Dish
+	@out SQLMenuClean @uri sqlite://ProjectPhaseII-NoConstraints-Clean.db/Menu
+	@out SQLDishClean @uri sqlite://ProjectPhaseII-NoConstraints-Clean.db/Dish
+	@end DropUnwantedColumns
+
+@out SQLMenuClean @uri sqlite://ProjectPhaseII-NoConstraints-Clean.db/Menu
+@out SQLDishClean @uri sqlite://ProjectPhaseII-NoConstraints-Clean.db/Dish
+@out SQLMenuItemClean @uri sqlite://ProjectPhaseII-NoConstraints-Clean.db/MenuItem
+@out SQLMenuPageClean @uri sqlite://ProjectPhaseII-NoConstraints-Clean.db/MenuPage
+@out ICViolationsForMenuCleansed @uri ICViolationsForMenuCleansed
+@out ICViolationsForDishCleansed @uri ICViolationsForDishCleansed
+@out ICViolationsForMenuPageCleansed @uri ICViolationsForMenuPageCleansed
+@out ICViolationsForMenuItemCleansed @uri ICViolationsForMenuItemCleansed
+@end DataCleanup
+
+'''

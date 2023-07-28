@@ -1,0 +1,19 @@
+#@begin Menu-Page-OpenRefine-Workflow  #@desc Linear OpenRefine Workflow
+#@param col-name:uuid
+#@param expression:value.trim()
+#@param expression:value.toUppercase()
+#@in table0
+#@out table2
+#@begin core/text-transform0#@desc Text transform on cells in column uuid using expression value.trim()
+#@param col-name:uuid
+#@param expression:value.trim()
+#@in table0
+#@out table1
+#@end core/text-transform0
+#@begin core/text-transform1#@desc Text transform on cells in column uuid using expression value.toUppercase()
+#@param col-name:uuid
+#@param expression:value.toUppercase()
+#@in table1
+#@out table2
+#@end core/text-transform1
+#@end Menu-Page-OpenRefine-Workflow
